@@ -1,21 +1,29 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
-type MyHandler struct{}
+func noteList(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Listagem de Notas")
+}
 
-func (MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Olá"))
+func noteView(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Exibindo uma nota especifica")
+}
+
+func noteCreate(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Criando uma nova nota")
 }
 
 func main() {
-
+	fmt.Println("Servidor rodando na porta 5000")
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Olá"))
-	})
 
-	http.ListenAndServe(":3000", mux)
+	mux.HandleFunc("/", noteList)
+	mux.HandleFunc("/note/view", noteView)
+	mux.HandleFunc("/note/create", noteCreate)
+
+	http.ListenAndServe(":5000", mux)
 }
